@@ -23,9 +23,10 @@ def auth():
     """
     try:
         s = session()
-        s.post('https://portal.fa.ru/CoreAccount/LogOn', data={'Login': config.LOGIN, 'Pwd': config.PWD})
+        s.post('http://portal.fa.ru/CoreAccount/LogOn', data={'Login': config.LOGIN, 'Pwd': config.PWD})
         return s
-    except:
+    except Exception as e:
+        print(e)
         return auth()
 
 
@@ -66,7 +67,9 @@ def start(bot, updates):
 
 
 if __name__ == '__main__':
+    print('Started')
     bot = BotHandler(config.TOKEN)
+    print('Bot created')
     while 1:
         start(bot, bot.get_updates(OFFSET))
         sleep(1)
