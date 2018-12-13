@@ -1,8 +1,7 @@
-from time import sleep
-from typing import Any, Union
-
-from requests import post, session, Session
 from json import dumps
+from time import sleep
+
+from requests import session, Session
 
 import config
 from Bot import BotHandler
