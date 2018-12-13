@@ -23,7 +23,7 @@ def auth():
     """
     try:
         s = session()
-        s.post('http://portal.fa.ru/CoreAccount/LogOn', data={'Login': config.LOGIN, 'Pwd': config.PWD})
+        s.post('https://portal.fa.ru/CoreAccount/LogOn', data={'Login': config.LOGIN, 'Pwd': config.PWD})
         return s
     except Exception as e:
         print(e)
