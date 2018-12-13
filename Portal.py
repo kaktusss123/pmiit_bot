@@ -6,7 +6,7 @@ WEEKDAY = ['Понедельник', 'Вторник', 'Среда', 'Четве
 
 
 def find_prepod(session, name):
-    resp = session.post('http://portal.fa.ru/CoreUser/SearchDialogResultAjax',
+    resp = session.post('https://portal.fa.ru/CoreUser/SearchDialogResultAjax',
                         data={'Name': name, 'Roles': 16})
     resp = resp.json()
     if not resp:
@@ -53,14 +53,14 @@ def get_schedule(session, command, prepod):
     if prepod is None:
         return
     if command.lower() == 'сегодня':
-        return parse_schedule(session.post('http://portal.fa.ru/Job/SearchAjax',
+        return parse_schedule(session.post('https://portal.fa.ru/Job/SearchAjax',
                                            data={'Date': today, 'DateBegin': today, 'DateEnd': today,
                                                  'JobType': 'TUTOR',
                                                  'TutorId': prepod[0], 'Tutor': prepod[1]}).text, today,
                               (datetime.datetime.today() + datetime.timedelta(hours=3)).weekday())
     elif command.lower() == 'завтра':
         tomorrow = (datetime.datetime.today() + datetime.timedelta(days=1, hours=3)).strftime('%d/%m/%Y')
-        return (parse_schedule(session.post('http://portal.fa.ru/Job/SearchAjax',
+        return (parse_schedule(session.post('https://portal.fa.ru/Job/SearchAjax',
                                             data={'Date': today, 'DateBegin': tomorrow, 'DateEnd': tomorrow,
                                                   'JobType': 'TUTOR',
                                                   'TutorId': prepod[0], 'Tutor': prepod[1]}).text, tomorrow,
@@ -71,7 +71,7 @@ def get_schedule(session, command, prepod):
         for delta in range(6):
             day = (datetime.datetime.today() + datetime.timedelta(days=delta - weekday, hours=3)).strftime(
                 '%d/%m/%Y')
-            res += (parse_schedule(session.post('http://portal.fa.ru/Job/SearchAjax',
+            res += (parse_schedule(session.post('https://portal.fa.ru/Job/SearchAjax',
                                                 data={'Date': today, 'DateBegin': day, 'DateEnd': day,
                                                       'JobType': 'TUTOR',
                                                       'TutorId': prepod[0], 'Tutor': prepod[1]}).text, day, delta))
@@ -81,7 +81,7 @@ def get_schedule(session, command, prepod):
         res = ''
         for delta in range(7, 13):
             day = (datetime.datetime.today() + datetime.timedelta(days=delta - weekday, hours=3)).strftime('%d/%m/%Y')
-            res += (parse_schedule(session.post('http://portal.fa.ru/Job/SearchAjax',
+            res += (parse_schedule(session.post('https://portal.fa.ru/Job/SearchAjax',
                                                 data={'Date': today, 'DateBegin': day, 'DateEnd': day,
                                                       'JobType': 'TUTOR',
                                                       'TutorId': prepod[0], 'Tutor': prepod[1]}).text, day,
