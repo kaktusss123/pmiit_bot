@@ -1,4 +1,8 @@
 import requests
+import traceback
+from json import dumps
+
+from config import MY_ID
 
 
 class BotHandler:
@@ -15,7 +19,7 @@ class BotHandler:
         return result_json
 
     def send_message(self, chat_id, text, keyboard=None):
-        params = {'chat_id': chat_id, 'text': text, 'reply_markup': keyboard}
+        params = {'chat_id': chat_id, 'text': text, 'reply_markup': keyboard, 'parse_mode': 'Markdown'}
         method = 'sendMessage'
         resp = requests.post(self.api_url + method, params)
         return resp
@@ -28,4 +32,7 @@ class BotHandler:
         else:
             return self.get_last_update()
 
+    def error(self, update):
+        self.send_message(MY_ID, traceback.format_exc())
+        self.send_message(MY_ID, dumps(update, ensure_ascii=False))
 

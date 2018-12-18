@@ -2,7 +2,7 @@ import datetime
 
 from lxml import html
 
-WEEKDAY = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
+WEEKDAY = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
 
 
 def find_prepod(session, name):
@@ -27,23 +27,23 @@ def parse_schedule(table, day, w):
     table = html.fromstring(table)
     disciplines = table.xpath('//tr[@class="rowDisciplines"]')
     if not disciplines:
-        return '\n{} [{}]\nНет пар\n'.format(day, WEEKDAY[w])
+        return '\n❗️{} [{}]❗️\nНет пар\n'.format(day, WEEKDAY[w])
 
     # date_block
-    res += '\n{}'.format(table.xpath('//tr[@class="rowDate warning"]/td[@data-field="datetime"]/text()')[0]) + '\n\n'
+    res += '\n❗️{}❗️'.format(table.xpath('//tr[@class="rowDate warning"]/td[@data-field="datetime"]/text()')[0]) + '\n\n'
 
     for disc in disciplines:
         # time_block
         time_block = disc.xpath('./td[@data-field="datetime"]/div/text()')
-        res += '{} - {}\n'.format(*time_block[:2])
+        res += '⏱{} - {}⏱\n'.format(*time_block[:2])
         # discipline_block
-        res += disc.xpath('.//td[@data-field="discipline"]/text()')[0].strip() + '\n'
+        res += '*{}*\n'.format(disc.xpath('.//td[@data-field="discipline"]/text()')[0].strip())
         # type_block
         res += time_block[2] + '\n' if len(time_block) > 2 else ''
         # group_block
-        res += 'Группа: ' + ','.join(disc.xpath('./td[@data-field="groups"]/span/text()')).strip() + '\n'
+        res += '*Группа:* ' + ','.join(disc.xpath('./td[@data-field="groups"]/span/text()')).strip() + '\n'
         # where_block
-        res += 'Кабинет: ' + disc.xpath('./td[@data-field="tutors"]/div/div/i/text()')[0].strip()[:-1] + \
+        res += '*Кабинет:* ' + disc.xpath('./td[@data-field="tutors"]/div/div/i/text()')[0].strip()[:-1] + \
                '\n' + disc.xpath('./td[@data-field="tutors"]/div/div/i/small/text()')[0].strip() + '\n\n'
     return res
 
