@@ -38,7 +38,7 @@ def start(bot, updates):
         OFFSET = updates[-1]['update_id'] + 1
         s = auth()
 
-    print(updates)
+#    print(updates)
     for update in updates:
         try:
             user = update['message']['chat']['id']
@@ -66,7 +66,7 @@ def start(bot, updates):
         except Exception:
             bot.error(update)
 
-    print(working)
+#    print(working)
 
 
 if __name__ == '__main__':
